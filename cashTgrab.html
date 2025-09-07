@@ -1,0 +1,1224 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>cashTgrab - Financial Literacy App</title>
+    <style>
+            * {
+              margin: 0;
+              padding: 0;
+              box-sizing: border-box;
+              font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+            }
+
+            body {
+              background-color: #f5f7fa;
+              color: #333;
+              max-width: 480px;
+              margin: 0 auto;
+              height: 100vh;
+              position: relative;
+              overflow: hidden;
+            }
+
+            .screen {
+              display: none;
+              flex-direction: column;
+              height: 100vh;
+              padding: 20px;
+              background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+              position: absolute;
+              width: 100%;
+              top: 0;
+              left: 0;
+            }
+
+            .screen.active {
+              display: flex;
+            }
+
+            .header {
+      v        display: flex;
+              justify-content: space-between;
+              align-items: center;
+              margin-bottom: 20px;
+              color: white;
+            }
+
+            .header h1 {
+              font-size: 1.5rem;
+              font-weight: 600;
+            }
+
+            .content {
+              flex: 1;
+              background: white;
+              border-radius: 20px 20px 0 0;
+              padding: 25px;
+              box-shadow: 0 -5px 15px rgba(0, 0, 0, 0.1);
+              overflow-y: auto;
+            }
+
+            .btn {
+              background: #4361ee;
+              color: white;
+              border: none;
+              padding: 15px 25px;
+              border-radius: 50px;
+              font-size: 1rem;
+              font-weight: 600;
+              cursor: pointer;
+              transition: all 0.3s ease;
+              display: block;
+              width: 100%;
+              margin: 15px 0;
+              box-shadow: 0 4px 10px rgba(67, 97, 238, 0.3);
+            }
+
+            .btn:hover {
+              background: #3a56d4;
+              transform: translateY(-2px);
+            }
+
+            .btn-secondary {
+              background: #4cc9f0;
+              box-shadow: 0 4px 10px rgba(76, 201, 240, 0.3);
+            }
+
+            .btn-secondary:hover {
+              background: #3bb4d8;
+            }
+
+            .btn-success {
+              background: #4ade80;
+              box-shadow: 0 4px 10px rgba(74, 222, 128, 0.3);
+            }
+
+            .btn-success:hover {
+              background: #3bcf70;
+            }
+
+            .btn-warning {
+              background: #facc15;
+              box-shadow: 0 4px 10px rgba(250, 204, 21, 0.3);
+            }
+
+            .btn-warning:hover {
+              background: #eab308;
+            }
+
+            .btn-danger {
+              background: #f87171;
+              box-shadow: 0 4px 10px rgba(248, 113, 113, 0.3);
+            }
+
+            .btn-danger:hover {
+              background: #ef4444;
+            }
+
+            .logo {
+              text-align: center;
+              margin: 30px 0;
+            }
+
+            .logo img {
+              max-width: 100%;
+              height: auto;
+              display: block;
+              margin: 0 auto;
+            }
+
+            .logo h1 {
+              font-size: 2.5rem;
+              color: white;
+              margin-bottom: 10px;
+              font-weight: bold;
+            }
+
+            .logo p {
+              color: rgba(255, 255, 255, 0.9);
+              font-size: 1.1rem;
+            }
+
+            .menu-grid {
+              display: grid;
+              grid-template-columns: repeat(2, 1fr);
+              gap: 20px;
+              margin-top: 20px;
+            }
+
+            .menu-item {
+              background: white;
+              border-radius: 15px;
+              padding: 20px 15px;
+              text-align: center;
+              box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+              transition: all 0.3s ease;
+              cursor: pointer;
+            }
+
+            .menu-item:hover {
+              transform: translateY(-5px);
+              box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            }
+
+            .menu-icon {
+              font-size: 2.5rem;
+              margin-bottom: 15px;
+              color: #4361ee;
+              display: inline-block;
+            }
+
+            .menu-item h3 {
+              font-size: 1.1rem;
+              color: #333;
+            }
+
+            .profile-header {
+              text-align: center;
+              padding: 20px 0;
+            }
+
+            .profile-pic {
+              width: 100px;
+              height: 100px;
+              border-radius: 50%;
+              background: #4361ee;
+              margin: 0 auto 15px;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              color: white;
+              font-size: 2.5rem;
+            }
+
+            .profile-name {
+              font-size: 1.5rem;
+              font-weight: 600;
+              margin-bottom: 5px;
+            }
+
+            .profile-stats {
+              display: flex;
+              justify-content: space-around;
+              margin: 25px 0;
+            }
+
+            .stat-box {
+              text-align: center;
+            }
+
+            .stat-value {
+              font-size: 1.8rem;
+              font-weight: 700;
+              color: #4361ee;
+            }
+
+            .stat-label {
+              font-size: 0.9rem;
+              color: #666;
+            }
+
+            .progress-section {
+              margin: 25px 0;
+            }
+
+            .progress-header {
+              display: flex;
+              justify-content: space-between;
+              margin-bottom: 10px;
+            }
+
+            .progress-bar {
+              height: 12px;
+              background: #e0e0e0;
+              border-radius: 10px;
+              overflow: hidden;
+            }
+
+            .progress-fill {
+              height: 100%;
+              background: linear-gradient(90deg, #4361ee, #4cc9f0);
+              border-radius: 10px;
+              width: 65%;
+            }
+
+            .flashcard-container {
+              perspective: 1000px;
+              height: 250px;
+              margin: 30px 0;
+            }
+
+            .flashcard {
+              width: 100%;
+              height: 100%;
+              position: relative;
+              transform-style: preserve-3d;
+              transition: transform 0.6s;
+              cursor: pointer;
+            }
+
+            .flashcard.flipped {
+              transform: rotateY(180deg);
+            }
+
+            .flashcard-face {
+              position: absolute;
+              width: 100%;
+              height: 100%;
+              backface-visibility: hidden;
+              border-radius: 15px;
+              display: flex;
+              flex-direction: column;
+              justify-content: center;
+              align-items: center;
+              padding: 20px;
+              text-align: center;
+              box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            }
+
+            .flashcard-front {
+              background: linear-gradient(135deg, #4361ee, #3a0ca3);
+              color: white;
+            }
+
+            .flashcard-back {
+              background: linear-gradient(135deg, #4cc9f0, #4895ef);
+              color: white;
+              transform: rotateY(180deg);
+            }
+
+            .flashcard h3 {
+              font-size: 1.5rem;
+              margin-bottom: 15px;
+            }
+
+            .flashcard p {
+              font-size: 1.1rem;
+              line-height: 1.5;
+            }
+
+            .tip-box {
+              background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+              border-left: 5px solid #4cc9f0;
+              padding: 20px;
+              border-radius: 0 10px 10px 0;
+              margin: 20px 0;
+            }
+
+            .tip-box h3 {
+              color: #4361ee;
+              margin-bottom: 10px;
+            }
+
+            .input-group {
+              margin: 20px 0;
+            }
+
+            .input-group label {
+              display: block;
+              margin-bottom: 8px;
+              font-weight: 500;
+              color: white;
+            }
+
+            .input-group input {
+              width: 100%;
+              padding: 15px;
+              border-radius: 10px;
+              border: none;
+              font-size: 1rem;
+              box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+            }
+
+            .back-btn {
+              background: none;
+              border: none;
+              color: white;
+              font-size: 1.2rem;
+              cursor: pointer;
+              display: flex;
+              align-items: center;
+            }
+
+            .back-btn i {
+              margin-right: 8px;
+            }
+
+            .budget-item {
+              display: flex;
+              justify-content: space-between;
+              align-items: center;
+              padding: 15px;
+              background: white;
+              border-radius: 10px;
+              margin: 10px 0;
+              box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+            }
+
+            .budget-info {
+              flex: 1;
+            }
+
+            .budget-title {
+              font-weight: 600;
+              margin-bottom: 5px;
+            }
+
+            .budget-amount {
+              color: #666;
+              font-size: 0.9rem;
+            }
+
+            .budget-progress {
+              width: 80px;
+              height: 8px;
+              background: #e0e0e0;
+              border-radius: 4px;
+              overflow: hidden;
+              margin: 0 15px;
+            }
+
+            .budget-progress-fill {
+              height: 100%;
+              background: #4361ee;
+              border-radius: 4px;
+            }
+
+            .budget-percent {
+              font-weight: 600;
+              min-width: 40px;
+              text-align: right;
+            }
+
+            .total-budget {
+              text-align: center;
+              padding: 20px;
+              background: linear-gradient(135deg, #4361ee, #3a0ca3);
+              color: white;
+              border-radius: 15px;
+              margin: 20px 0;
+            }
+
+            .total-budget h3 {
+              font-size: 1.2rem;
+              margin-bottom: 10px;
+            }
+
+            .total-budget .amount {
+              font-size: 2rem;
+              font-weight: 700;
+            }
+
+            .quiz-question {
+              background: #f8f9fa;
+              padding: 20px;
+              border-radius: 15px;
+              margin: 20px 0;
+            }
+
+            .quiz-question h3 {
+              margin-bottom: 15px;
+              color: #333;
+            }
+
+            .quiz-option {
+              display: block;
+              width: 100%;
+              padding: 12px 15px;
+              margin: 8px 0;
+              background: white;
+              border: 2px solid #e0e0e0;
+              border-radius: 10px;
+              text-align: left;
+              cursor: pointer;
+              transition: all 0.2s;
+            }
+
+            .quiz-option:hover {
+              border-color: #4361ee;
+              background: #f0f5ff;
+            }
+
+            .quiz-option.selected {
+              border-color: #4361ee;
+              background: #e1ebff;
+            }
+
+            .notification {
+              position: fixed;
+              top: 20px;
+              left: 50%;
+              transform: translateX(-50%);
+              background: #4ade80;
+              color: white;
+              padding: 15px 25px;
+              border-radius: 10px;
+              box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+              z-index: 1000;
+              display: none;
+            }
+
+            .offline-indicator {
+              background: #ef4444;
+              color: white;
+              padding: 10px;
+              text-align: center;
+              font-size: 0.9rem;
+              display: none;
+            }
+
+            .offline-indicator.show {
+              display: block;
+            }
+
+            .expense-form {
+              background: #f8f9fa;
+              padding: 20px;
+              border-radius: 15px;
+              margin: 20px 0;
+            }
+
+            .expense-form h3 {
+              margin-bottom: 15px;
+              color: #333;
+            }
+
+            .form-group {
+              margin-bottom: 15px;
+            }
+
+            .form-group label {
+              display: block;
+              margin-bottom: 5px;
+              font-weight: 500;
+            }
+
+            .form-group input,
+            .form-group select {
+              width: 100%;
+              padding: 12px;
+              border-radius: 8px;
+              border: 1px solid #ddd;
+              font-size: 1rem;
+            }
+
+            .savings-summary {
+              display: flex;
+              justify-content: space-around;
+              text-align: center;
+              margin: 25px 0;
+              padding: 20px;
+              background: linear-gradient(135deg, #10b981, #059669);
+              color: white;
+              border-radius: 15px;
+            }
+
+            .savings-box h3 {
+              font-size: 1rem;
+              margin-bottom: 10px;
+            }
+
+            .savings-box .amount {
+              font-size: 0.8rem;
+              font-weight: 700;
+            }
+
+            .history-item {
+              display: flex;
+              justify-content: space-between;
+              padding: 15px;
+              border-bottom: 1px solid #eee;
+            }
+
+            .history-item:last-child {
+              border-bottom: none;
+            }
+
+            .history-details {
+              flex: 1;
+            }
+
+            .history-title {
+              font-weight: 600;
+              margin-bottom: 5px;
+            }
+
+            .history-category {
+              font-size: 0.8rem;
+              color: #666;
+            }
+
+            .history-amount {
+              font-weight: 600;
+              color: #ef4444;
+            }
+
+            .history-income {
+              color: #10b981;
+            }
+
+            .financial-summary {
+              display: flex;
+              justify-content: space-around;
+              text-align: center;
+              margin: 25px 0;
+              padding: 20px;
+              background: linear-gradient(135deg, #4361ee, #3a0ca3);
+              color: white;
+              border-radius: 15px;
+            }
+
+            .summary-box h3 {
+              font-size: 1rem;
+              margin-bottom: 10px;
+            }
+
+            .summary-box .amount {
+              font-size: 0.8rem;
+              font-weight: 700;
+            }
+    </style>
+  </head>
+  <body>
+    <div class="offline-indicator" id="offline-indicator">
+      You are currently offline. All data is saved locally.
+    </div>
+
+    <div class="notification" id="notification">Correct! Well done.</div>
+
+    <!-- Login Screen -->
+    <div id="login-screen" class="screen active">
+      <div class="logo">
+        <h1>
+          <img
+            src="cTg.png"
+            alt="cashTgrab Logo"
+            style="max-width: 250px; display: block; margin: 0 auto"
+          />
+        </h1>
+        <p>Master Your Financial Future</p>
+      </div>
+      <div class="content">
+        <h2 style="text-align: center; margin-bottom: 30px; color: #333">
+          Welcome to Cash Grab
+        </h2>
+        <div class="input-group">
+          <label for="username">Enter Your Name</label>
+          <input type="text" id="username" placeholder="Enter your name" />
+        </div>
+        <button class="btn" onclick="login()">Get Started</button>
+      </div>
+    </div>
+
+    <!-- Welcome Screen -->
+    <div id="welcome-screen" class="screen">
+      <div class="logo">
+        <h1>
+          <img
+            src="cTg.png"
+            alt="cashTgrab Logo"
+            style="max-width: 250px; display: block; margin: 0 auto"
+          />
+        </h1>
+        <p>Master Your Financial Future</p>
+      </div>
+      <div class="content">
+        <h2 style="text-align: center; margin-bottom: 30px">Welcome Back!</h2>
+        <button class="btn" onclick="showScreen('menu-screen')">
+          Continue Learning
+        </button>
+        <button
+          class="btn btn-secondary"
+          onclick="showScreen('profile-screen')"
+        >
+          View Profile
+        </button>
+      </div>
+    </div>
+
+    <!-- Main Menu Screen -->
+    <div id="menu-screen" class="screen">
+      <div class="header">
+        <button class="back-btn" onclick="showScreen('welcome-screen')">
+          ← Back
+        </button>
+        <h1>
+          <img
+            src="cTg.png"
+            alt="cashTgrab Logo"
+            style="max-width: 150px; display: block; margin: 0 auto"
+          />
+        </h1>
+        <div></div>
+      </div>
+      <div class="content">
+        <h2 style="text-align: center; margin: 20px 0; color: #333">
+          Choose a Feature
+        </h2>
+        <div class="menu-grid">
+          <div class="menu-item" onclick="showScreen('flashcard-screen')">
+            <div class="menu-icon">📚</div>
+            <h3>Flashcards</h3>
+          </div>
+          <div class="menu-item" onclick="showScreen('quiz-screen')">
+            <div class="menu-icon">❓</div>
+            <h3>Quizzes</h3>
+          </div>
+          <div class="menu-item" onclick="showScreen('budget-screen')">
+            <div class="menu-icon">📊</div>
+            <h3>Budget Tracker</h3>
+          </div>
+          <div class="menu-item" onclick="showScreen('tips-screen')">
+            <div class="menu-icon">💡</div>
+            <h3>Tips & Facts</h3>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Profile Screen -->
+    <div id="profile-screen" class="screen">
+      <div class="header">
+        <button class="back-btn" onclick="showScreen('welcome-screen')">
+          ← Back
+        </button>
+        <h1>Your Profile</h1>
+        <div></div>
+      </div>
+      <div class="content">
+        <div class="profile-header">
+          <div class="profile-pic" id="profile-pic">
+            <div>👤</div>
+          </div>
+          <div class="profile-name" id="profile-name">John Doe</div>
+          <div>Financial Learner</div>
+        </div>
+
+        <div class="financial-summary">
+          <div class="summary-box">
+            <h3>Total Cash</h3>
+            <div class="amount" id="profile-total-cash">₱0.00</div>
+          </div>
+          <div class="summary-box">
+            <h3>Total Expenses</h3>
+            <div class="amount" id="profile-total-expenses">₱0.00</div>
+          </div>
+          <div class="summary-box">
+            <h3>Savings</h3>
+            <div class="amount" id="profile-savings">₱0.00</div>
+          </div>
+        </div>
+
+        <div class="profile-stats">
+          <div class="stat-box">
+            <div class="stat-value" id="streak">12</div>
+            <div class="stat-label">Day Streak</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-value" id="lessons">24</div>
+            <div class="stat-label">Lessons</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-value" id="score">85%</div>
+            <div class="stat-label">Avg Score</div>
+          </div>
+        </div>
+
+        <div class="progress-section">
+          <div class="progress-header">
+            <span>Learning Progress</span>
+            <span>65%</span>
+          </div>
+          <div class="progress-bar">
+            <div class="progress-fill"></div>
+          </div>
+        </div>
+
+        <button class="btn btn-secondary" onclick="showScreen('menu-screen')">
+          Continue Learning
+        </button>
+      </div>
+    </div>
+
+    <!-- Flashcard Screen -->
+    <div id="flashcard-screen" class="screen">
+      <div class="header">
+        <button class="back-btn" onclick="showScreen('menu-screen')">
+          ← Back
+        </button>
+        <h1>Flashcards</h1>
+        <div></div>
+      </div>
+      <div class="content">
+        <h2 style="text-align: center; margin: 15px 0">Accounting Terms</h2>
+        <div class="flashcard-container">
+          <div class="flashcard" id="flashcard" onclick="flipCard()">
+            <div class="flashcard-face flashcard-front">
+              <h3 id="flashcard-term">Asset</h3>
+              <p>Tap to reveal definition</p>
+            </div>
+            <div class="flashcard-face flashcard-back">
+              <h3 id="flashcard-term-back">Asset</h3>
+              <p id="flashcard-definition">
+                Anything of value that a company owns, such as cash, inventory,
+                or property.
+              </p>
+            </div>
+          </div>
+        </div>
+        <button class="btn btn-secondary" onclick="nextCard()">
+          Next Card
+        </button>
+      </div>
+    </div>
+
+    <!-- Quiz Screen -->
+    <div id="quiz-screen" class="screen">
+      <div class="header">
+        <button class="back-btn" onclick="showScreen('menu-screen')">
+          ← Back
+        </button>
+        <h1>Quiz</h1>
+        <div></div>
+      </div>
+      <div class="content">
+        <h2 style="text-align: center; margin: 15px 0">
+          Accounting Basics Quiz
+        </h2>
+        <div class="quiz-question">
+          <h3 id="quiz-question">What is the basic accounting equation?</h3>
+          <div id="quiz-options">
+            <button class="quiz-option" onclick="selectOption(this)">
+              Assets = Liabilities + Equity
+            </button>
+            <button class="quiz-option" onclick="selectOption(this)">
+              Assets = Revenue - Expenses
+            </button>
+            <button class="quiz-option" onclick="selectOption(this)">
+              Assets + Liabilities = Equity
+            </button>
+            <button class="quiz-option" onclick="selectOption(this)">
+              Revenue = Assets + Expenses
+            </button>
+          </div>
+        </div>
+        <button class="btn btn-success" onclick="submitQuiz()">
+          Submit Answer
+        </button>
+      </div>
+    </div>
+
+    <!-- Budget Tracker Screen -->
+    <div id="budget-screen" class="screen">
+      <div class="header">
+        <button class="back-btn" onclick="showScreen('menu-screen')">
+          ← Back
+        </button>
+        <h1>Budget Tracker</h1>
+        <div></div>
+      </div>
+      <div class="content">
+        <div class="savings-summary">
+          <div class="savings-box">
+            <h3>Total Cash</h3>
+            <div class="amount" id="total-cash">₱0</div>
+          </div>
+          <div class="savings-box">
+            <h3>Total Expenses</h3>
+            <div class="amount" id="total-expenses">₱0</div>
+          </div>
+          <div class="savings-box">
+            <h3>Savings</h3>
+            <div class="amount" id="savings-amount">₱0</div>
+          </div>
+        </div>
+
+        <div class="expense-form">
+          <h3>Add Transaction</h3>
+          <div class="form-group">
+            <label for="transaction-type">Type</label>
+            <select id="transaction-type">
+              <option value="income">Income</option>
+              <option value="expense">Expense</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="transaction-amount">Amount (₱)</label>
+            <input type="number" id="transaction-amount" placeholder="0.00" />
+          </div>
+          <div class="form-group">
+            <label for="transaction-category">Category</label>
+            <select id="transaction-category">
+              <option value="salary">Salary</option>
+              <option value="freelance">Freelance</option>
+              <option value="gift">Gift</option>
+              <option value="food">Food</option>
+              <option value="rent">Rent</option>
+              <option value="utilities">Utilities</option>
+              <option value="entertainment">Entertainment</option>
+              <option value="other">Other</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="transaction-description">Description</label>
+            <input
+              type="text"
+              id="transaction-description"
+              placeholder="Description"
+            />
+          </div>
+          <button class="btn btn-success" onclick="addTransaction()">
+            Add Transaction
+          </button>
+        </div>
+
+        <h3 style="margin: 20px 0">Transaction History</h3>
+        <div id="transaction-history">
+          <div class="history-item">
+            <div class="history-details">
+              <div class="history-title">Initial Balance</div>
+              <div class="history-category">Starting Amount</div>
+            </div>
+            <div class="history-amount history-income">₱0.00</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tips & Facts Screen -->
+    <div id="tips-screen" class="screen">
+      <div class="header">
+        <button class="back-btn" onclick="showScreen('menu-screen')">
+          ← Back
+        </button>
+        <h1>Tips & Facts</h1>
+        <div></div>
+      </div>
+      <div class="content">
+        <h2 style="text-align: center; margin: 15px 0">Financial Tips</h2>
+
+        <div class="tip-box">
+          <h3>Did You Know?</h3>
+          <p>
+            The 50/30/20 rule suggests allocating 50% of income to needs, 30% to
+            wants, and 20% to savings and debt repayment.
+          </p>
+        </div>
+
+        <div class="tip-box">
+          <h3>Financial Tip</h3>
+          <p>
+            Start building an emergency fund with at least 3-6 months of living
+            expenses. Keep it in a high-yield savings account for easy access.
+          </p>
+        </div>
+
+        <div class="tip-box">
+          <h3>Investing Insight</h3>
+          <p>
+            Dollar-cost averaging (DCA) is an investment strategy where you
+            invest a fixed amount regularly, regardless of market conditions.
+          </p>
+        </div>
+
+        <button class="btn btn-secondary">More Tips</button>
+      </div>
+    </div>
+
+    <script>
+      // Screen navigation
+      function showScreen(screenId) {
+        // Hide all screens
+        document.querySelectorAll(".screen").forEach((screen) => {
+          screen.classList.remove("active");
+        });
+
+        // Show requested screen
+        document.getElementById(screenId).classList.add("active");
+      }
+
+      // Login function
+      function login() {
+        const username = document.getElementById("username").value;
+        if (username.trim() !== "") {
+          document.getElementById("profile-name").textContent = username;
+          document.getElementById("profile-pic").innerHTML = `<div> <img
+            src="money.png"
+            alt="cashTgrab Profile"
+            style="max-width: 200px; display: block; margin: 0 auto"
+          /> </div>`;
+          showScreen("welcome-screen");
+
+          // Save username to localStorage for offline use
+          try {
+            localStorage.setItem("cashgrab_username", username);
+          } catch (e) {
+            console.log("LocalStorage not available");
+          }
+        } else {
+          alert("Please enter your name");
+        }
+      }
+
+      // Flashcard functionality
+      function flipCard() {
+        const flashcard = document.getElementById("flashcard");
+        flashcard.classList.toggle("flipped");
+      }
+
+      // Flashcard data
+      const flashcards = [
+        {
+          term: "Asset",
+          definition:
+            "Anything of value that a company owns, such as cash, inventory, or property.",
+        },
+        {
+          term: "Liability",
+          definition:
+            "A financial obligation or debt that a company owes to others.",
+        },
+        {
+          term: "Equity",
+          definition:
+            "The owner's claim on the assets of a company after all liabilities have been deducted.",
+        },
+        {
+          term: "Revenue",
+          definition:
+            "The total income generated from the sale of goods or services.",
+        },
+        {
+          term: "Expense",
+          definition:
+            "The cost of operations that a company incurs to generate revenue.",
+        },
+      ];
+
+      let currentCardIndex = 0;
+
+      function nextCard() {
+        const flashcard = document.getElementById("flashcard");
+        flashcard.classList.remove("flipped");
+
+        currentCardIndex = (currentCardIndex + 1) % flashcards.length;
+        const card = flashcards[currentCardIndex];
+
+        document.getElementById("flashcard-term").textContent = card.term;
+        document.getElementById("flashcard-term-back").textContent = card.term;
+        document.getElementById("flashcard-definition").textContent =
+          card.definition;
+      }
+
+      // Quiz functionality
+      let selectedOption = null;
+
+      function selectOption(element) {
+        // Remove selected class from all options
+        document.querySelectorAll(".quiz-option").forEach((option) => {
+          option.classList.remove("selected");
+        });
+
+        // Add selected class to clicked option
+        element.classList.add("selected");
+        selectedOption = element;
+      }
+
+      function submitQuiz() {
+        if (!selectedOption) {
+          alert("Please select an answer");
+          return;
+        }
+
+        // Check if correct (first option is correct)
+        const options = Array.from(document.querySelectorAll(".quiz-option"));
+        const isCorrect = options[0].classList.contains("selected");
+
+        const notification = document.getElementById("notification");
+        notification.textContent = isCorrect
+          ? "Correct! Well done."
+          : "Incorrect. Try again!";
+        notification.style.background = isCorrect ? "#4ade80" : "#f87171";
+        notification.style.display = "block";
+
+        // Hide notification after 2 seconds
+        setTimeout(() => {
+          notification.style.display = "none";
+        }, 2000);
+      }
+
+      // Budget Tracker functionality
+      let totalCash = 0;
+      let totalExpenses = 0;
+      let transactions = [];
+
+      function addTransaction() {
+        const type = document.getElementById("transaction-type").value;
+        const amount = parseFloat(
+          document.getElementById("transaction-amount").value
+        );
+        const category = document.getElementById("transaction-category").value;
+        const description = document.getElementById(
+          "transaction-description"
+        ).value;
+
+        if (isNaN(amount) || amount <= 0) {
+          alert("Please enter a valid amount");
+          return;
+        }
+
+        // Add transaction to history
+        const transaction = {
+          id: Date.now(),
+          type: type,
+          amount: amount,
+          category: category,
+          description: description,
+          date: new Date(),
+        };
+
+        transactions.push(transaction);
+
+        // Update totals
+        if (type === "income") {
+          totalCash += amount;
+        } else {
+          totalExpenses += amount;
+        }
+
+        // Update UI
+        updateBudgetUI();
+        updateProfileSummary();
+
+        // Add to history display
+        addToHistory(transaction);
+
+        // Clear form
+        document.getElementById("transaction-amount").value = "";
+        document.getElementById("transaction-description").value = "";
+
+        // Show success message
+        const notification = document.getElementById("notification");
+        notification.textContent = "Transaction added successfully!";
+        notification.style.background = "#4ade80";
+        notification.style.display = "block";
+
+        setTimeout(() => {
+          notification.style.display = "none";
+        }, 2000);
+      }
+
+      function addToHistory(transaction) {
+        const historyContainer = document.getElementById("transaction-history");
+        const historyItem = document.createElement("div");
+        historyItem.className = "history-item";
+
+        const isIncome = transaction.type === "income";
+        const amountClass = isIncome
+          ? "history-amount history-income"
+          : "history-amount";
+        const amountSign = isIncome ? "+" : "-";
+
+        historyItem.innerHTML = `
+                <div class="history-details">
+                    <div class="history-title">${
+                      transaction.description || transaction.category
+                    }</div>
+                    <div class="history-category">${transaction.category}</div>
+                </div>
+                <div class="${amountClass}">${amountSign}₱${transaction.amount.toFixed(
+          2
+        )}</div>
+            `;
+
+        // Insert after the initial balance item
+        historyContainer.insertBefore(
+          historyItem,
+          historyContainer.firstChild.nextSibling
+        );
+      }
+
+      function updateBudgetUI() {
+        const savings = totalCash - totalExpenses;
+
+        document.getElementById(
+          "total-cash"
+        ).textContent = `₱${totalCash.toFixed(2)}`;
+        document.getElementById(
+          "total-expenses"
+        ).textContent = `₱${totalExpenses.toFixed(2)}`;
+        document.getElementById(
+          "savings-amount"
+        ).textContent = `₱${savings.toFixed(2)}`;
+
+        // Update savings color based on value
+        const savingsElement = document.getElementById("savings-amount");
+        if (savings < 0) {
+          savingsElement.style.color = "#ef4444";
+        } else {
+          savingsElement.style.color = "#10b981";
+        }
+      }
+
+      function updateProfileSummary() {
+        const savings = totalCash - totalExpenses;
+
+        document.getElementById(
+          "profile-total-cash"
+        ).textContent = `₱${totalCash.toFixed(2)}`;
+        document.getElementById(
+          "profile-total-expenses"
+        ).textContent = `₱${totalExpenses.toFixed(2)}`;
+        document.getElementById(
+          "profile-savings"
+        ).textContent = `₱${savings.toFixed(2)}`;
+
+        // Update savings color based on value
+        const savingsElement = document.getElementById("profile-savings");
+        if (savings < 0) {
+          savingsElement.style.color = "#ef4444";
+        } else {
+          savingsElement.style.color = "#10b981";
+        }
+      }
+
+      // Offline functionality
+      function updateOfflineStatus() {
+        const indicator = document.getElementById("offline-indicator");
+        if (!navigator.onLine) {
+          indicator.classList.add("show");
+        } else {
+          indicator.classList.remove("show");
+        }
+      }
+
+      // Initialize app
+      document.addEventListener("DOMContentLoaded", function () {
+        // Check for saved username
+        try {
+          const savedUsername = localStorage.getItem("cashgrab_username");
+          if (savedUsername) {
+            document.getElementById("profile-name").textContent = savedUsername;
+            document.getElementById("profile-pic").innerHTML = `<div>👤</div>`;
+          }
+        } catch (e) {
+          console.log("LocalStorage not available");
+        }
+
+        // Set up offline detection
+        window.addEventListener("online", updateOfflineStatus);
+        window.addEventListener("offline", updateOfflineStatus);
+        updateOfflineStatus();
+
+        // Start with login screen
+        showScreen("login-screen");
+
+        // Initialize budget UI
+        updateBudgetUI();
+        updateProfileSummary();
+      });
+    </script>
+  </body>
+</html>
